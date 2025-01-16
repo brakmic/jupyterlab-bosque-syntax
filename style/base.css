@@ -1,6 +1,6 @@
 /* Error underlines */
 .cm-error-underline {
-  text-decoration: underline wavy #ff0000;
+  text-decoration: underline wavy #f00;
 }
 
 .cm-bosque-func {
@@ -72,7 +72,7 @@
 }
 
 .cm-bosque-operator {
-  color: #000000 !important;
+  color: #000 !important;
   font-weight: bold !important;
 }
 
