@@ -28,12 +28,11 @@ To remove the extension, execute:
 pip uninstall jupyterlab_bosque_syntax
 ```
 
-
 ### Build Scripts
 
-* Run `reinstall_extension.sh` to build and install the extension.
+- Run `reinstall_extension.sh` to build and install the extension.
 
-* Enter `jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''` to start the Jupyter Lab server.
+- Enter `jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''` to start the Jupyter Lab server.
 
 ### Development install
 
@@ -104,5 +103,3 @@ More information are provided within the [ui-tests](./ui-tests/README.md) README
 ### Packaging the extension
 
 See [RELEASE](RELEASE.md)
-
-

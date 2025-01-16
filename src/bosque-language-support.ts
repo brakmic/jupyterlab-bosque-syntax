@@ -8,17 +8,21 @@ import { bosqueOverlay } from './bosque-overlay';
 /** A quick parse-tree logger. */
 function logParseTree(docText: string) {
   const tree = parser.parse(docText);
-  let cursor = tree.cursor();
+  const cursor = tree.cursor();
   console.log('--- Bosque parse tree debug ---');
   const stack = [cursor.node];
   while (stack.length) {
     const node = stack.pop();
-    if (!node) continue;
+    if (!node) {
+      continue;
+    }
     const nodeText = docText.slice(node.from, node.to);
     if (node.type.isError) {
       console.log(`ERROR node [${node.from}..${node.to}] -> "${nodeText}"`);
     } else {
-      console.log(`Node "${node.type.name}" [${node.from}..${node.to}] -> "${nodeText}"`);
+      console.log(
+        `Node "${node.type.name}" [${node.from}..${node.to}] -> "${nodeText}"`
+      );
     }
     for (let child = node.firstChild; child; child = child.nextSibling) {
       stack.push(child);
@@ -36,7 +40,7 @@ const bosqueLinter = linter(view => {
     logParseTree(text); // can be deactivated
     // parse
     const tree = parser.parse(text);
-    let cursor = tree.cursor();
+    const cursor = tree.cursor();
     do {
       if (cursor.type.isError) {
         diagnostics.push({
@@ -55,10 +59,10 @@ const bosqueLinter = linter(view => {
 });
 
 export const bosqueLanguageSupport = new LanguageSupport(
-  bosqueLanguage,       // add Bosque language support
+  bosqueLanguage, // add Bosque language support
   [
-    bosqueOverlay(),    // load overlay colorizer
-    bosqueLinter,       // load linter
-    bosqueHighlighting, // load syntax highlighting
+    bosqueOverlay(), // load overlay colorizer
+    bosqueLinter, // load linter
+    bosqueHighlighting // load syntax highlighting
   ]
 );

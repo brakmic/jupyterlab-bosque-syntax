@@ -19,11 +19,7 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2018",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/parser",
-      "./src/types"
-    ]
+    "typeRoots": ["./node_modules/@types", "./src/parser", "./src/types"]
   },
   "include": ["src/**/*", "src/**/*.d.ts"]
 }

@@ -1,14 +1,10 @@
 import { parser } from './parser/bosque-parser';
 import { LRLanguage } from '@codemirror/language';
-import {
-  styleTags,
-  tags as t,
-  Tag
-} from '@lezer/highlight';
+import { styleTags, tags as t, Tag } from '@lezer/highlight';
 
 export const functionKeywordTag = Tag.define();
-export const methodKeywordTag   = Tag.define();
-export const anonFunctionTag    = Tag.define();
+export const methodKeywordTag = Tag.define();
+export const anonFunctionTag = Tag.define();
 export const invariantTag = Tag.define();
 export const validationTag = Tag.define();
 export const specialTag = Tag.define();
