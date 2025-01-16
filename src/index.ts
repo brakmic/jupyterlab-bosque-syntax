@@ -13,14 +13,10 @@ const BOSQUE_PLUGIN_ID = 'jupyterlab-bosque-syntax:plugin';
 
 const extension: JupyterFrontEndPlugin<void> = {
   id: BOSQUE_PLUGIN_ID,
-  description:
-    'Bosque syntax highlighting with distinct colors for each keyword group.',
+  description: 'Bosque syntax highlighting with distinct colors for each keyword group.',
   autoStart: true,
   requires: [IEditorLanguageRegistry],
-  activate: (
-    app: JupyterFrontEnd,
-    languageRegistry: IEditorLanguageRegistry
-  ) => {
+  activate: (app: JupyterFrontEnd, languageRegistry: IEditorLanguageRegistry) => {
     try {
       // Register language
       languageRegistry.addLanguage({
@@ -47,6 +43,7 @@ const extension: JupyterFrontEndPlugin<void> = {
     } catch (error) {
       console.error('Failed to register Bosque (.bsq) file type:', error);
     }
+    console.log('JupyterLab extension jupyterlab_bosque_syntax is activated!');
   },
 
   deactivate: async () => {
