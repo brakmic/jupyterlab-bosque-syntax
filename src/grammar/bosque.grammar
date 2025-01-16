@@ -1,0 +1,377 @@
+@top BosqueFile { Statement* }
+
+@skip { whitespace | comment }
+
+@tokens {
+  whitespace { $[ \t\n\r]+ }
+  comment { "%*" (![\*] | "*" ![\%])* "*%" | "%%" ![\n]* }
+
+  @precedence {
+    // Top-Level Declarations
+    declareKw, namespaceKw, conceptKw, entityKw,
+    // Modifiers
+    publicKw, privateKw, abstractKw, virtualKw, recursiveKw, overrideKw, constKw,
+    // Declarations
+    functionKw, fieldKw, methodKw, fnKw, predKw, letKw, varKw, typeKw, typedeclKw, datatypeKw,
+    // Control
+    ifKw, elifKw, elseKw, returnKw, matchKw,
+    // Operators / constants
+    constant, staticOp, dotOp, assignOp,
+    // Identifiers
+    typeName, identifier,
+    // Checks
+    invariantKw, validateKw, testKw, ensuresKw,
+    // Special keywords
+    thisKw, refKw, deferKw
+  }
+
+  // --------------------
+  // 1) Modifiers
+  publicKw   { "public" }
+  privateKw  { "private" }
+  abstractKw { "abstract" }
+  virtualKw  { "virtual" }
+  recursiveKw{ "recursive" }
+  overrideKw { "override" }
+  constKw    { "const" }
+
+  // --------------------
+  // 2) Declaration keywords
+  declareKw   { "declare" }
+  namespaceKw { "namespace" }
+  conceptKw   { "concept" }
+  entityKw    { "entity" }
+  providesKw  { "provides" }
+  functionKw  { "function" }
+  methodKw    { "method" }
+  fieldKw     { "field" }
+  datatypeKw  { "datatype" }
+  typeKw      { "type" }
+  typedeclKw  { "typedecl" }
+  fnKw        { "fn" }
+  predKw      { "pred" }
+  letKw       { "let" }
+  varKw       { "var" }
+
+  // 3) Control
+  ifKw     { "if" }
+  elifKw   { "elif" }
+  elseKw   { "else" }
+  matchKw  { "match" }
+  returnKw { "return" }
+
+  // 4) Operators
+  colonOp   { ":" }
+  staticOp  { "::" }
+  dotOp     { "." }
+  assignOp  { "=" }
+
+  // 5) Constants
+  constant {
+    "none" | "true" | "false" | "fail" |
+    "ok" | "some" | "none" | "env"
+  }
+
+  // 6) Identifiers
+  typeName   { $[A-Z] $[A-Za-z0-9_]* }
+  identifier { $[a-z_] $[A-Za-z0-9_]* }
+
+  // 7) Literals
+  number    { $[0-9]+ }
+  string    { '"' (![\"\n\\] | "\\" ![\n])* '"' }
+  compareOp { "==" | "!=" | "<" | ">" | "<=" | ">=" }
+  addOp     { "+" | "-" }
+  mulOp     { "*" | "/" }
+
+  // 8) Special keywords
+  thisKw     { "this" }
+  refKw      { "ref" }
+  deferKw    { "defer" }
+
+  // 9) Check keywords
+  invariantKw { "invariant" }
+  validateKw  { "validate" }
+  testKw      { "test" }
+  ensuresKw   { "ensures" }
+}
+
+
+// The 'Modifiers' rule matches zero or more access or method modifiers.
+// It consists of keywords like public, private, abstract, virtual, recursive, 
+// override, and const, allowing a repeated sequence of any or all of these.
+Modifiers {
+  (publicKw | privateKw | abstractKw | virtualKw | recursiveKw | overrideKw | constKw)*
+}
+
+/**
+ * Top-level parse rule
+ */
+Statement {
+  Declaration        |
+  ReturnStatement    |
+  ControlStatement   |
+  ExpressionStatement|
+  LetStatement       |
+  VarStatement       |
+  MatchStatement     |
+  CheckStatement     |
+  SpecialStatement   |
+  TypeDeclStatement
+}
+
+TypeDeclStatement {
+  typedeclKw identifier "=" TypeExpression ";"
+}
+
+/** 
+ * Let/Var statements
+ */
+LetStatement {
+  letKw identifier (colonOp TypeRef)? assignOp Expression ";"
+}
+
+VarStatement {
+  varKw identifier (colonOp TypeRef)? assignOp Expression ";"
+}
+
+ReturnStatement {
+  returnKw Expression ";"
+}
+
+MatchStatement {
+  matchKw "(" Expression ")" Block
+}
+
+CheckStatement {
+  invariantKw Expression ";"
+  |
+  validateKw Expression ";"
+  |
+  testKw Expression ";"
+  |
+  ensuresKw Expression ";"
+}
+
+SpecialStatement {
+  thisKw ";" 
+  |
+  refKw ";" 
+  |
+  deferKw ";"
+}
+
+/**
+ * Control statements
+ */
+ControlStatement {
+  IfStatement
+}
+
+IfStatement {
+  ifKw Expression Block
+  (elifKw Expression Block)*
+  (elseKw Block)?
+}
+
+ExpressionStatement {
+  Expression ";"
+}
+
+/**
+ * Declarations (namespace, concept, entity, function, field, datatype)
+ */
+Declaration {
+  NamespaceDecl |
+  ConceptDecl   |
+  EntityDecl    |
+  FunctionDecl  |
+  FieldDecl     |
+  DatatypeDecl  |
+  TypeDecl
+}
+
+/** Example: declare namespace Main; */
+NamespaceDecl {
+  declareKw? namespaceKw typeName ";"
+}
+
+/** 
+ * concept MyConcept { abstract method greet(...) }
+ */
+ConceptDecl {
+  Modifiers conceptKw typeName "{" ConceptMember* "}"
+}
+
+/** 
+ * Provides a way to define abstract methods inside a concept
+ * e.g. abstract method greet(...)
+ *      method sayHello(...) { ... }
+ *      field someField: SomeType;
+ */
+ConceptMember {
+  FieldDecl |
+  Modifiers MethodSignature
+}
+
+/**
+ * entity MyEntity provides MyConcept { 
+ *    field someField: SomeType;
+ *    override method greet(...): String {
+ *       return "Hello!";
+ *    }  
+ * }
+ */
+EntityDecl {
+  Modifiers entityKw typeName (providesKw typeName ("," typeName)*)?
+  "{" EntityMember* "}"
+}
+EntityMember {
+  FieldDecl |
+  Modifiers MethodSignature
+}
+
+/** 
+ * function main() : String { ... }
+ */
+FunctionDecl {
+  Modifiers functionKw identifier "(" Parameters? ")" (":" TypeRef)? Block
+}
+
+/** 
+ * field someField: SomeType;
+ */
+FieldDecl {
+  Modifiers fieldKw identifier ":" TypeRef (assignOp Expression)? ";"
+}
+
+/** 
+ * type MyType = ...;
+ */
+TypeDecl {
+  Modifiers typeKw identifier "=" TypeExpression ";"
+}
+
+/** 
+ * datatype MyDataType { ... }
+ */
+DatatypeDecl {
+  Modifiers datatypeKw identifier "{" DatatypeMember* "}"
+}
+
+DatatypeMember {
+  FieldDecl |
+  FunctionDecl
+}
+
+/**
+ * At runtime, "method greet(...)" is recognized as:
+ *   Node "MethodSignature" -> "method greet(...)"
+ */
+MethodSignature {
+  methodKw identifier "(" Parameters? ")" (":" TypeRef)? (Block | ";")
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Types & parameters
+
+TypeParams {
+  "<" typeName ("," typeName)* ">"
+}
+
+TypeRef {
+  typeName TypeParams?
+}
+
+TypeExpression {
+  TypeRef |
+  "(" TypeRef ("," TypeRef)* ")"
+}
+
+Parameters {
+  Parameter ("," Parameter)*
+}
+
+Parameter {
+  identifier ":" TypeRef
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Expressions
+
+Expression { Comparison }
+
+Comparison { Sum (compareOp Sum)* }
+
+Sum { Product (addOp Product)* }
+
+Product { Primary (mulOp Primary)* }
+
+/**
+ * Main expression forms 
+ */
+Primary {
+  ObjectCreation   |
+  identifier       |
+  (!typeName typeName) |
+  number           |
+  string           |
+  constant         |
+  StaticCall       |
+  MethodCall       |
+  AnonymousFunctionExpr |
+  "(" Expression ")"
+}
+
+/**
+ * e.g. SomeEntity{} with optional statements inside 
+ */
+ObjectCreation {
+  typeName "{" Statement* "}"
+}
+
+/** e.g. String::concat(...) */
+StaticCall {
+  typeName staticOp identifier ("(" (Expression ("," Expression)*)? ")")?
+}
+
+/** e.g. obj.method(...) */
+MethodCall {
+  Primary dotOp identifier ("(" (Expression ("," Expression)*)? ")")?
+}
+
+/** e.g. fn(x) => x+1 */
+AnonymousFunctionExpr {
+  fnKw "(" AnonymousParams? ")" "=>" SimpleExpr |
+  predKw "(" AnonymousParams? ")" "=>" SimpleExpr
+}
+
+SimpleExpr {
+  identifier |
+  number |
+  string |
+  constant |
+  "(" Expression ")"
+}
+
+AnonymousParams {
+  AnonymousParam ("," AnonymousParam)*
+}
+
+AnonymousParam {
+  identifier (":" TypeRef)?
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Blocks
+
+Block {
+  "{" Statement* "}"
+}
+
+@precedence {
+  typeName @left,
+  staticOp @left,
+  mulOp @left,
+  addOp @left,
+  compareOp @left
+}

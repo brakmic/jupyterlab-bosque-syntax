@@ -1,0 +1,97 @@
+/* Error underlines */
+.cm-error-underline {
+    text-decoration: underline wavy #FF0000;
+}
+
+.cm-bosque-func {
+    color: #0033B3 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-field {
+    color: #0033B3 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-anon {
+    color: #FF4500 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-annotation {
+    color: #800080 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-methodcall {
+    color: #8B0000 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-instance {
+    color: #2F4F4F !important; 
+    font-weight: bold !important;
+}
+
+.cm-bosque-varname {
+    color: #8B4513 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-ctrlkw {
+    color: #9C27B0 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-keyword {
+    color: #0033B3 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-typename {
+    color: #008B8B !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-comment {
+    color: #6A737D !important;
+    font-style: italic !important;
+}
+
+.cm-bosque-string {
+    color: #A31515 !important;
+}
+
+.cm-bosque-number {
+    color: #098658 !important;
+}
+
+.cm-bosque-atom {
+    color: #0033B3 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-operator {
+    color: #000000 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-typedecl {
+    color: #4682B4 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-special {
+    color: #D2691E !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-invariant {
+    color: #2E8B57 !important;
+    font-weight: bold !important;
+}
+
+.cm-bosque-validation {
+    color: #8A2BE2 !important;
+    font-weight: bold !important;
+}

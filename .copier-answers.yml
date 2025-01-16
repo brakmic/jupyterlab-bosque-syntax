@@ -1,0 +1,13 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.3.7
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: brakmic@gmail.com
+author_name: Harris Brakmic
+has_binder: false
+has_settings: false
+kind: frontend
+labextension_name: jupyterlab-bosque-syntax
+project_short_description: A JupyterLab extension for Bosque Syntax Highlighting
+python_name: jupyterlab_bosque_syntax
+repository: https://github.com/brakmic/jupyterlab-bosque-syntax
+test: true

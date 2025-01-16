@@ -1,0 +1,215 @@
+{
+    "name": "jupyterlab-bosque-syntax",
+    "version": "0.1.0",
+    "description": "A JupyterLab extension for Bosque Syntax Highlighting",
+    "keywords": [
+        "jupyter",
+        "jupyterlab",
+        "jupyterlab-extension",
+        "bosque",
+        "syntax",
+        "highlighting"
+    ],
+    "homepage": "https://github.com/brakmic/jupyterlab-bosque-syntax",
+    "bugs": {
+        "url": "https://github.com/brakmic/jupyterlab-bosque-syntax/issues"
+    },
+    "license": "BSD-3-Clause",
+    "author": {
+        "name": "Harris Brakmic",
+        "email": "brakmic@gmail.com"
+    },
+    "files": [
+        "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+        "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
+        "src/**/*.{ts,tsx}"
+    ],
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "style": "style/index.css",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/brakmic/jupyterlab-bosque-syntax.git"
+    },
+    "scripts": {
+        "build": "build:parser:all && jlpm build:lib && jlpm build:labextension:dev",
+        "build:prod": "jlpm clean && jlpm build:parser:all && jlpm build:lib:prod && jlpm build:labextension",
+        "build:labextension": "jupyter labextension build .",
+        "build:labextension:dev": "jupyter labextension build --development True .",
+        "build:lib": "tsc --sourceMap",
+        "build:lib:prod": "tsc",
+        "build:parser": "lezer-generator src/grammar/bosque.grammar -o src/parser/bosque-parser.js",
+        "build:parser:all": "jlpm build:parser && mkdir -p lib/parser && cp src/parser/bosque-parser.* lib/parser",
+        "clean": "jlpm clean:lib",
+        "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
+        "clean:lintcache": "rimraf .eslintcache .stylelintcache",
+        "clean:labextension": "rimraf bosque_syntax/labextension bosque_syntax/_version.py",
+        "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
+        "eslint": "jlpm eslint:check --fix",
+        "eslint:check": "eslint . --cache --ext .ts,.tsx",
+        "install:extension": "jlpm build",
+        "lint": "jlpm stylelint && jlpm prettier && jlpm eslint",
+        "lint:check": "jlpm stylelint:check && jlpm prettier:check && jlpm eslint:check",
+        "prettier": "jlpm prettier:base --write --list-different",
+        "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
+        "prettier:check": "jlpm prettier:base --check",
+        "stylelint": "jlpm stylelint:check --fix",
+        "stylelint:check": "stylelint --cache \"style/**/*.css\"",
+        "test": "jest --coverage",
+        "watch": "run-p watch:src watch:labextension watch:parser",
+        "watch:src": "tsc -w --sourceMap",
+        "watch:labextension": "jupyter labextension watch .",
+        "watch:parser": "nodemon --watch src/grammar/bosque.grammar --exec 'jlpm build:parser'"
+    },
+    "dependencies": {
+        "@codemirror/highlight": "^0.19.8",
+        "@codemirror/language": "^6.10.8",
+        "@codemirror/lint": "^6.8.4",
+        "@codemirror/state": "^6.5.0",
+        "@codemirror/stream-parser": "^0.19.9",
+        "@codemirror/view": "^6.36.1",
+        "@jupyterlab/application": "^4.3.4",
+        "@jupyterlab/apputils": "^4.4.4",
+        "@jupyterlab/codeeditor": "^4.3.4",
+        "@jupyterlab/codemirror": "^4.3.4",
+        "@jupyterlab/docregistry": "^4.3.4",
+        "@lezer/common": "^1.2.3",
+        "@lezer/highlight": "^1.2.1",
+        "@lezer/lr": "^1.4.2"
+    },
+    "devDependencies": {
+        "@jupyterlab/builder": "^4.0.0",
+        "@jupyterlab/testutils": "^4.0.0",
+        "@lezer/generator": "^1.7.2",
+        "@types/jest": "^29.2.0",
+        "@types/json-schema": "^7.0.11",
+        "@types/react": "^18.0.26",
+        "@types/react-addons-linked-state-mixin": "^0.14.22",
+        "@typescript-eslint/eslint-plugin": "^6.1.0",
+        "@typescript-eslint/parser": "^6.1.0",
+        "css-loader": "^6.7.1",
+        "eslint": "^8.36.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-prettier": "^5.0.0",
+        "jest": "^29.2.0",
+        "nodemon": "^3.1.9",
+        "npm-run-all2": "^7.0.1",
+        "prettier": "^3.0.0",
+        "rimraf": "^5.0.1",
+        "source-map-loader": "^1.0.2",
+        "style-loader": "^3.3.1",
+        "stylelint": "^15.10.1",
+        "stylelint-config-recommended": "^13.0.0",
+        "stylelint-config-standard": "^34.0.0",
+        "stylelint-csstree-validator": "^3.0.0",
+        "stylelint-prettier": "^4.0.0",
+        "typescript": "~5.0.2",
+        "yjs": "^13.5.0"
+    },
+    "sideEffects": [
+        "style/*.css",
+        "style/index.js"
+    ],
+    "styleModule": "style/index.js",
+    "publishConfig": {
+        "access": "public"
+    },
+    "jupyterlab": {
+        "extension": true,
+        "outputDir": "jupyterlab_bosque_syntax/labextension"
+    },
+    "eslintIgnore": [
+        "node_modules",
+        "dist",
+        "coverage",
+        "**/*.d.ts",
+        "tests",
+        "**/__tests__",
+        "ui-tests"
+    ],
+    "eslintConfig": {
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/eslint-recommended",
+            "plugin:@typescript-eslint/recommended",
+            "plugin:prettier/recommended"
+        ],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+            "project": "tsconfig.json",
+            "sourceType": "module"
+        },
+        "plugins": [
+            "@typescript-eslint"
+        ],
+        "rules": {
+            "@typescript-eslint/naming-convention": [
+                "error",
+                {
+                    "selector": "interface",
+                    "format": [
+                        "PascalCase"
+                    ],
+                    "custom": {
+                        "regex": "^I[A-Z]",
+                        "match": true
+                    }
+                }
+            ],
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    "args": "none"
+                }
+            ],
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-namespace": "off",
+            "@typescript-eslint/no-use-before-define": "off",
+            "@typescript-eslint/quotes": [
+                "error",
+                "single",
+                {
+                    "avoidEscape": true,
+                    "allowTemplateLiterals": false
+                }
+            ],
+            "curly": [
+                "error",
+                "all"
+            ],
+            "eqeqeq": "error",
+            "prefer-arrow-callback": "error"
+        }
+    },
+    "prettier": {
+        "singleQuote": true,
+        "trailingComma": "none",
+        "arrowParens": "avoid",
+        "endOfLine": "auto",
+        "overrides": [
+            {
+                "files": "package.json",
+                "options": {
+                    "tabWidth": 4
+                }
+            }
+        ]
+    },
+    "stylelint": {
+        "extends": [
+            "stylelint-config-recommended",
+            "stylelint-config-standard",
+            "stylelint-prettier/recommended"
+        ],
+        "plugins": [
+            "stylelint-csstree-validator"
+        ],
+        "rules": {
+            "csstree/validator": true,
+            "property-no-vendor-prefix": null,
+            "selector-class-pattern": "^([a-z][A-z\\d]*)(-[A-z\\d]+)*$",
+            "selector-no-vendor-prefix": null,
+            "value-no-vendor-prefix": null
+        }
+    }
+}
