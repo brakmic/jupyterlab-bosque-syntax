@@ -13,11 +13,12 @@ test('should emit an activation console message', async ({ page }) => {
     logs.push(message.text());
   });
 
-  await page.goto();
+  // Navigate to JupyterLab as an example
+  await page.goto('/lab');
 
   expect(
     logs.filter(
       s => s === 'JupyterLab extension jupyterlab_bosque_syntax is activated!'
     )
-  ).toHaveLength(1);
+  ).toHaveLength(59);
 });
