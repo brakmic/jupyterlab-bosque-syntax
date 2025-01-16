@@ -1,6 +1,6 @@
 # jupyterlab_bosque_syntax
 
-[![Github Actions Status](https://github.com/brakmic/jupyterlab-bosque-syntax/workflows/Build/badge.svg)](https://github.com/brakmic/jupyterlab-bosque-syntax/actions/workflows/check-release.yml)
+[![Github Actions Status](https://github.com/brakmic/jupyterlab-bosque-syntax/workflows/Build/badge.svg)](https://github.com/brakmic/jupyterlab-bosque-syntax/actions/workflows/build.yml)
 
 A JupyterLab extension for Bosque Syntax Highlighting
 
