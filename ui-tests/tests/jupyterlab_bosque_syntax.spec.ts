@@ -17,7 +17,7 @@ test('should emit an activation console message', async ({ page }) => {
 
   expect(
     logs.filter(
-      s => s === 'JupyterLab extension jupyterlab-bosque-syntax is activated!'
+      s => s === 'JupyterLab extension jupyterlab_bosque_syntax is activated!'
     )
   ).toHaveLength(1);
 });
